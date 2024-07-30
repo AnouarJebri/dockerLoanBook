@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            margin-top: 5%;
+            margin-bottom: 5%;
+        }
+        .login-form-1 {
+            padding: 5%;
+            box-shadow: 0px 0px 20px 0px #000;
+        }
+        .login-form-1 h3 {
+            text-align: center;
+            margin-bottom: 12%;
+            color: white;
+        }
+        .btnSubmit {
+            width: 100%;
+            border-radius: 1rem;
+            padding: 1.5%;
+            border: none;
+            cursor: pointer;
+        }
+        .login-form-1 .btnSubmit {
+            font-weight: 600;
+            color: #fff;
+            background-color: #0062cc;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #66afe9;
+        }
+        .footer a {
+            color: yellow;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .text-center {
+            color: white;
+        }
+        .text-center a {
+            color: yellow;
+        }
+        .text-center a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="container login-container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 login-form-1">
+            <h3>Login</h3>
+            <form id="loginForm" method="post">
+                <div class="form-group">
+                    <label>
+                        <input id="email" type="email" class="form-control" placeholder="Your Email *" name="email" required />
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input id="password" type="password" class="form-control" placeholder="Your Password *" name="password" required />
+                    </label>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btnSubmit" value="Login" />
+                </div>
+                <div class="text-center">
+                    Don't have an account? <a th:href="@{/register}">Sign up</a>
+                </div>
+            </form>
+            <div id="login-message"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        const backendUrl = 'http://localhost:8083/auth';
+
+        $("#loginForm").on('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const email = $('#email').val();
+            const password = $('#password').val();
+
+            const loginData = {
+                email: email,
+                password: password
+            };
+
+            $.ajax({
+                url: backendUrl + "/login",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(loginData),
+                xhrFields: {
+                    withCredentials: true // Ensure credentials (cookies) are sent
+                },
+                success: function(response) {
+                    const message = response.message;
+                    const role = response.role;
+                    const name = response.name;
+
+                    if (role === 'ADMIN') {
+                        window.location.href = 'homeA';
+                    } else if (role === 'SUBSCRIBER') {
+                        window.location.href = 'homeS';
+                    } else {
+                        $('#login-message').text(message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('XHR:', xhr); // Log the entire XHR object
+                    console.log('Status:', status); // Log the status
+                    console.log('Error:', error); // Log the error
+
+                    $('#login-message').text('Login failed: ' + xhr.responseText);
+                }
+            });
+        });
+    });
+    /*$(document).ready(function() {
+        $("#loginForm").on('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const email = $('#email').val();
+            const password = $('#password').val();
+
+            const loginData = {
+                email: email,
+                password: password
+            };
+
+            $.ajax({
+                url: "http://localhost:8083/auth/login",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(loginData),
+                success: function(response) {
+                    const message = response.message;
+                    const role = response.role;
+
+                    // Check if session is valid
+                    $.ajax({
+                        url: "http://localhost:8083/auth/checkSession",
+                        type: "GET",
+                        success: function(sessionResponse) {
+                            if (sessionResponse.valid) {
+                                // Redirect based on role
+                                if (role === 'ADMIN') {
+                                    window.location.href = 'homeA';
+                                    alert(message);
+                                } else if (role === 'SUBSCRIBER') {
+                                    window.location.href = 'homeS';
+                                    alert(message);
+                                }
+                            } else {
+                                // If session is not valid, redirect to loginError
+                                window.location.href = 'loginError';
+                            }
+                        },
+                        error: function() {
+                            // Handle session check error
+                            $('#login-message').text('Session check failed. Please try again.');
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    $('#login-message').text('Login failed. Please try again.');
+                }
+            });
+        });
+    });*/
+
+</script>
+</body>
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #00B2FF; /* Clear blue color */
+            color: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            transition: width 0.3s;
+            z-index: 1000;
+        }
+        .sidebar:hover {
+            width: 280px;
+        }
+        .sidebar h1 {
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #fff;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .sidebar ul li {
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .sidebar ul li:hover {
+            background-color: #555;
+        }
+        .sidebar ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .sidebar ul li i {
+            margin-right: 10px;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .header {
+            background-color: #006AFF; /* Clear blue color */
+            color: #fff; /* White text color */
+            padding: 20px;
+            text-align: center;
+        }
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+                height: auto;
+                position: fixed;
+                z-index: 1000;
+            }
+            .sidebar:hover {
+                width: 250px;
+            }
+            .sidebar ul li {
+                padding: 10px;
+                text-align: center;
+            }
+            .sidebar ul li i {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+            .content {
+                margin-left: 80px;
+            }
+        }
+        .hamburger {
+            display: none;
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            z-index: 1100;
+            cursor: pointer;
+        }
+        .hamburger .fa-bars,
+        .hamburger .fa-times {
+            font-size: 24px;
+            color: #fff;
+        }
+        @media screen and (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+            .sidebar {
+                display: none;
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                left: -100%;
+                background-color: #333;
+                overflow-y: auto;
+            }
+            .sidebar.active {
+                display: block;
+                left: 0;
+                transition: left 0.3s ease;
+            }
+        }
+        table {
+            border-collapse: collapse;
+        }
+
+        /*CSS for the List of users*/
+
+        #user-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        /* Table header styling */
+        #user-list thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        #user-list th, #user-list td {
+            padding: 12px 15px;
+        }
+
+        /* Table body row styling */
+        #user-list tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        #user-list tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        #user-list tbody tr:nth-of-type(odd) {
+            background-color: #ffffff;
+        }
+
+        #user-list tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+
+        /* Hover effect */
+        #user-list tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Responsive table */
+        @media (max-width: 600px) {
+            #user-list thead {
+                display: none;
+            }
+
+            #user-list, #user-list tbody, #user-list tr, #user-list td {
+                display: block;
+                width: 100%;
+            }
+
+            #user-list tr {
+                margin-bottom: 15px;
+            }
+
+            #user-list td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            #user-list td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 50%;
+                padding-left: 15px;
+                font-weight: bold;
+                text-align: left;
+            }
+        }
+
+        /*CSS for the list of books*/
+
+        #book-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        /* Table header styling */
+        #book-list thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        #book-list th, #book-list td {
+            padding: 12px 15px;
+        }
+
+        /* Table body row styling */
+        #book-list tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        #book-list tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        #book-list tbody tr:nth-of-type(odd) {
+            background-color: #ffffff;
+        }
+
+        #book-list tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+
+        /* Hover effect */
+        #book-list tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Responsive table */
+        @media (max-width: 600px) {
+            #book-list thead {
+                display: none;
+            }
+
+            #book-list, #book-list tbody, #book-list tr, #book-list td {
+                display: block;
+                width: 100%;
+            }
+
+            #book-list tr {
+                margin-bottom: 15px;
+            }
+
+            #book-list td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            #book-list td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 50%;
+                padding-left: 15px;
+                font-weight: bold;
+                text-align: left;
+            }
+        }
+
+        #add-book-btn {
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #add-book-form {
+            margin-bottom: 20px;
+        }
+
+        #add-book-form label {
+            display: inline-block;
+            width: 150px;
+        }
+
+        #add-book-form input {
+            margin-bottom: 10px;
+        }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+
+<div class="hamburger" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <h1>Admin Dashboard</h1>
+    <ul>
+        <li><a href="#"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+        <li><a href="#" id="view-users"><i class="fas fa-users"></i>Users</a></li>
+        <li><a href="#" id="view-books"><i class="fas fa-book"></i>Books</a></li>
+        <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
+        <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+</div>
+
+
+<!--list of the users here !-->
+<div class="content">
+    <div class="header">
+        <h2>Welcome to the Admin Dashboard</h2>
+    </div>
+    <div id="user-list-section" style="display: none;">
+        <h2>List of Users</h2>
+        <table id="user-list" class="table">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- User rows will be appended here -->
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <!--List of the books here-->
+    <div id="book-list-section" style="display: none;">
+        <h2>List of Books</h2>
+        <table id="book-list" class="table">
+            <thead>
+            <tr>
+                <th>author</th>
+                <th>number of books</th>
+                <th>title</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Book rows will be appended here -->
+            </tbody>
+        </table>
+
+
+        <!--For Adding a book-->
+        <button id="add-book-btn">+ Add Book</button>
+        <div id="add-book-form" style="display:none;">
+            <form id="new-book-form">
+                <label for="author">Author:</label>
+                <input type="text" id="author" name="author" required><br>
+                <label for="nb_of_books">Number of Books:</label>
+                <input type="number" id="nb_of_books" name="nb_of_books" required><br>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required><br>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+
+
+        <!--For updating a book-->
+        <div id="edit-book-form" style="display:none;">
+            <form id="update-book-form">
+                <input type="hidden" id="edit-book-id">
+                <label for="edit-author">Author:</label>
+                <input type="text" id="edit-author" name="edit-author" required><br>
+                <label for="edit-nb_of_books">Number of Books:</label>
+                <input type="number" id="edit-nb_of_books" name="edit-nb_of_books" required><br>
+                <label for="edit-title">Title:</label>
+                <input type="text" id="edit-title" name="edit-title" required><br>
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleSidebar() {
+        var sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("active");
+    }
+</script>
+
+
+
+<!--Script for the session check-->
+<script>
+    /*$(document).ready(function() {
+        const backendUrl = 'http://localhost:8083/auth';
+        // Check if session is valid
+        $.ajax({
+            url: backendUrl + "/checkSession",
+            type: "GET",
+            xhrFields: {
+                withCredentials: true // Ensure credentials (cookies) are sent
+            },
+            success: function(sessionResponse) {
+                if (sessionResponse.valid===false) {
+                    // If session is not valid, redirect to loginError
+                    window.location.href = 'loginError';
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle session check error
+                alert('Session check failed: ' + xhr.responseText);
+                //window.location.href = 'loginError';
+            }
+        });
+    });*/
+
+    $(document).ready(function() {
+        const backendUrl = 'http://localhost:8083/auth';
+
+        // Check if session is valid
+        $.ajax({
+            url: backendUrl + "/checkSession",
+            type: "GET",
+            success: function(sessionResponse) {
+                if (!sessionResponse.valid) {
+                    // If session is not valid, redirect to loginError
+                    window.location.href = 'loginError';
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Session check failed: ' + xhr.responseText);
+               // window.location.href = 'loginError';
+            }
+        });
+
+        /*function loadRestrictedContent() {
+            // Example of loading content if the session is valid
+            $.ajax({
+                url: backendUrl + "/restrictedPage",
+                type: "GET",
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function(response) {
+                    $('#restrictedContent').text(response);
+                },
+                error: function(xhr, status, error) {
+                    alert('Failed to load restricted content: ' + xhr.responseText);
+                }
+            });
+        }*/
+    });
+
+
+</script>
+
+
+
+
+<script>
+    //logout
+    $(document).ready(function() {
+        const backendUrl = 'http://localhost:8083/auth';
+        const backendUrl1 = 'http://localhost:8084/books';
+        $("#logout").click(function(event) {
+            event.preventDefault(); // Prevent default link behavior
+
+            $.ajax({
+                type: "POST",
+                url: backendUrl+"/logout",
+                xhrFields: {
+                    withCredentials: true // Ensure credentials (cookies) are sent
+                },
+                success: function(response) {
+                    localStorage.clear();
+                    // Clear cookies by setting expiration to the past
+                   // document.cookie.split(';').forEach(function(c) {
+                     //   document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=Thu, 01 Jan 1970 00:00:00 GMT');
+                    //});
+                    alert(response);
+                    window.location.href = "/login";
+                },
+                error: function(xhr, status,error) {
+                    console.log('XHR:', xhr); // Log the entire XHR object
+                    console.log('Status:', status); // Log the status
+                    console.log('Error:', error); // Log the error
+
+                    alert("Error: " + error.responseText);
+                }
+            });
+        });
+
+        //list the users
+        $("#view-users").click(function(event) {
+            event.preventDefault(); // Prevent default link behavior
+
+            $.ajax({
+                type: "GET",
+                url: backendUrl+"/users",
+                success: function(response) {
+                    const users = response;
+                    const tbody = $("#user-list tbody");
+                    tbody.empty(); // Clear any existing rows
+
+                    users.forEach(user => {
+                        const row = `<tr>
+                            <td>${user.nom}</td>
+                            <td>${user.prenom}</td>
+                            <td>${user.email}</td>
+                            <td>${user.role}</td>
+                        </tr>`;
+                        tbody.append(row);
+                    });
+
+                    // Show the user list section
+                    $("#user-list-section").show();
+                    $("#book-list-section").hide();
+                },
+                error: function(error) {
+                    alert("Error fetching users: " + error.responseText);
+                }
+            });
+        });
+
+
+
+
+        //List the books
+        $("#view-books").click(function(event) {
+            event.preventDefault(); // Prevent default link behavior
+
+            $.ajax({
+                type: "GET",
+                url: backendUrl1+"/ListBook",
+                success: function(response) {
+                    const books = response;
+                    const tbody = $("#book-list tbody");
+                    tbody.empty(); // Clear any existing rows
+
+
+                    books.forEach(book => {
+                        const row = `<tr>
+                            <td>${book.author}</td>
+                            <td>${book.nb_of_books}</td>
+                            <td>${book.title}</td>
+
+                            <td>
+                                <button class="edit-book-btn fas fa-edit" data-id="${book.id}"
+                                    data-author="${book.author}"
+                                    data-nb_of_books="${book.nb_of_books}"
+                                    data-title="${book.title}"></button>
+                                <button class="delete-book-btn fas fa-trash-alt" data-id="${book.id}"></button>
+                            </td>
+                        </tr>`;
+                        tbody.append(row);
+                    });
+
+                    // Show the book list section
+                    $("#book-list-section").show();
+                    $("#user-list-section").hide();
+                },
+                error: function(error) {
+                    alert("Error fetching books: " + error.responseText);
+                }
+            });
+        });
+
+
+
+
+
+
+        // Show the form when the add book button is clicked
+        $("#add-book-btn").click(function() {
+            $("#add-book-form").toggle();
+            $("#edit-book-form").hide();
+        });
+
+        // Handle form submission for adding a new book
+        $("#new-book-form").submit(function(event) {
+            event.preventDefault();
+
+            const newBook = {
+                author: $("#author").val(),
+                nb_of_books: $("#nb_of_books").val(),
+                title: $("#title").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: backendUrl1+"/BookAdd",
+                contentType: "application/json",
+                data: JSON.stringify(newBook),
+                success: function(response) {
+                    alert(response); // Show success message
+
+                    // Append the new book to the table
+                    const tbody = $("#book-list tbody");
+                    const row = `<tr>
+                    <td>${newBook.author}</td>
+                    <td>${newBook.nb_of_books}</td>
+                    <td>${newBook.title}</td>
+
+                     <td>
+                        <button class="edit-book-btn fas fa-edit" data-id="${newBook.id}"
+                            data-author="${newBook.author}"
+                            data-nb_of_books="${newBook.nb_of_books}"
+                            data-title="${newBook.title}"></button>
+                        <button class="delete-book-btn fas fa-trash-alt" data-id="${newBook.id}"></button>
+                    </td>
+                </tr>`;
+                    tbody.append(row);
+
+                    // Hide the form and reset it
+                    $("#add-book-form").hide();
+                    $("#new-book-form")[0].reset();
+                },
+                error: function(error) {
+                    alert("Error adding book: " + error.responseText);
+                }
+            });
+        });
+
+
+
+
+        // Handle edit book button click
+        $(document).on("click", ".edit-book-btn", function() {
+            const bookId = $(this).data("id");
+            const author = $(this).data("author");
+            const nb_of_books = $(this).data("nb_of_books");
+            const title = $(this).data("title");
+
+            // Populate the edit form with the existing book details
+            $("#edit-book-id").val(bookId);
+            $("#edit-author").val(author);
+            $("#edit-nb_of_books").val(nb_of_books);
+            $("#edit-title").val(title);
+
+            // Show the edit form
+            $("#edit-book-form").show();
+            $("#add-book-form").hide();
+        });
+
+        // Handle form submission for updating a book
+        $("#update-book-form").submit(function(event) {
+            event.preventDefault();
+
+            const updatedBook = {
+                id: $("#edit-book-id").val(),
+                author: $("#edit-author").val(),
+                nb_of_books: $("#edit-nb_of_books").val(),
+                title: $("#edit-title").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: backendUrl1+"/UpdateBook",
+                contentType: "application/json",
+                data: JSON.stringify(updatedBook),
+                success: function(response) {
+                    alert(response); // Show success message
+
+                    // Update the book details in the table
+                    const row = $(`button[data-id='${updatedBook.id}']`).closest("tr");
+                    row.find("td:eq(0)").text(updatedBook.author);
+                    row.find("td:eq(1)").text(updatedBook.nb_of_books);
+                    row.find("td:eq(2)").text(updatedBook.title);
+
+                    // Hide the edit form and reset it
+                    $("#edit-book-form").hide();
+                    $("#update-book-form")[0].reset();
+                },
+                error: function(error) {
+                    alert("Error updating book: " + error.responseText);
+                }
+            });
+        });
+
+
+
+
+        // Handle delete book button click
+        $(document).on("click", ".delete-book-btn", function() {
+            const bookId = $(this).data("id");
+            const row = $(this).closest("tr");
+
+            const bookAuthor = row.find(".book-author").text();
+            const bookNbOfBooks = row.find(".book-nb_of_books").text();
+            const bookTitle = row.find(".book-title").text();
+
+            if (confirm("Are you sure you want to delete this book?")) {
+                const bookToDelete = {
+                    id: bookId,
+                    author: bookAuthor,
+                    nb_of_books: parseInt(bookNbOfBooks, 10),
+                    title: bookTitle
+                };
+                $.ajax({
+                    type: "POST",
+                    url: backendUrl1+"/DeleteBook",
+                    contentType: "application/json",
+                    data: JSON.stringify(bookToDelete),
+                    success: function(response) {
+                        alert(response); // Show success message
+                        // Remove the deleted book row from the table
+                        row.remove();
+                    },
+                    error: function(xhr) {
+                        // Log the full error for debugging
+                        console.error("Error deleting book:", xhr.responseText);
+                        alert("Error deleting book: " + xhr.responseText);
+                    }
+                });
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

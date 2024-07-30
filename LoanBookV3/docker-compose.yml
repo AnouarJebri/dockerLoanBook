@@ -1,7 +1,12 @@
 version: '3.8'
+
+
 networks:
   microsnetwork:
     driver: bridge
+
+
+
 services:
 
   mariadb:
@@ -30,7 +35,7 @@ services:
       context: ./ConfigServer
       dockerfile: Dockerfile
     image: configserver:latest
-    container_name: configserver
+    #container_name: configserver
     ports:
       - "8888:8888"
     networks:
@@ -39,10 +44,31 @@ services:
       mariadb:
         condition: service_started
     #healthcheck:
-      #test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+     # test: [ "CMD", "curl", "-f", "http://localhost:8888/hi" ]
       #interval: 10s
       #timeout: 5s
       #retries: 3
+
+
+
+  bookservice:
+    build:
+      context: ./BookService
+      dockerfile: Dockerfile
+    image: bookservice:latest
+    container_name: bookservice
+    ports:
+      - "8084:8084"
+    networks:
+      - microsnetwork
+    depends_on:
+      mariadb:
+        condition: service_started
+      configserver:
+        condition: service_started
+
+
+
 
 
   authservice:
@@ -65,3 +91,19 @@ services:
         condition: service_started
       configserver:
         condition: service_started
+
+  #frontendservice:
+    #build:
+     # context: ./FrontendService
+      #dockerfile: Dockerfile
+    #image: frontendservice:latest
+    #container_name: frontendservice
+    #ports:
+     # - "8085:8085"
+    #networks:
+     # - microsnetwork
+    #depends_on:
+     # mariadb:
+      #  condition: service_started
+      #configserver:
+       # condition: service_started

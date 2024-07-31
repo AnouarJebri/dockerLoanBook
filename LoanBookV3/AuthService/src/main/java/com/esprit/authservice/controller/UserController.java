@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @CrossOrigin(origins = "http://localhost:8085", allowCredentials = "true")
+
     @PostMapping("/signup")
     public String signup(@RequestBody User user){
         // Check if user with the same email already exists
@@ -38,7 +38,7 @@ public class UserController {
         return "User registered successfully";
     }
 
-    @CrossOrigin(origins = "http://localhost:8085", allowCredentials = "true")
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginUser, HttpServletRequest request) {
         // Check if the user exists
@@ -61,14 +61,14 @@ public class UserController {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:8085", allowCredentials = "true")
+
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.findAll();
         return ResponseEntity.ok(users);
     }
 
-    @CrossOrigin(origins = "http://localhost:8085", allowCredentials = "true")
+
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         // Invalidate the session on the server side
@@ -78,10 +78,10 @@ public class UserController {
         }
 
         // Remove the session cookie from the client side
-        Cookie cookie = new Cookie("JSESSIONID", null);
+       /* Cookie cookie = new Cookie("JSESSIONID", null);
         cookie.setPath("/"); // Set the path to ensure the cookie is removed
         cookie.setMaxAge(0); // Set max age to 0 to remove the cookie immediately
-        response.addCookie(cookie);
+        response.addCookie(cookie);*/
 
         // Prepare the response
         Map<String, String> responseBody = new HashMap<>();
@@ -91,7 +91,7 @@ public class UserController {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:8085", allowCredentials = "true")
+
     @GetMapping("/checkSession")
     public ResponseEntity<Map<String, Boolean>> checkSession(HttpServletRequest request) {
         HttpSession session = request.getSession(false); // Get the current session, if it exists
@@ -101,7 +101,7 @@ public class UserController {
         return ResponseEntity.ok(response); // Return the session validity as JSON
     }
 
-    @CrossOrigin(origins = "http://localhost:8085", allowCredentials = "true")
+    /*@CrossOrigin(origins = "http://localhost:8085", allowCredentials = "true")
     @GetMapping("/restrictedPage")
     public ResponseEntity<?> restrictedPage(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -109,7 +109,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
         }
         return ResponseEntity.ok("Welcome to the restricted page");
-    }
+    }*/
 }
 //private RestTemplate restTemplate;
     /*@GetMapping("/myconfig")

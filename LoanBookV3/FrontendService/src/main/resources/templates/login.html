@@ -113,8 +113,6 @@
 </div>
 <script>
     $(document).ready(function() {
-        const backendUrl = 'http://localhost:8083/auth';
-
         $("#loginForm").on('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -127,17 +125,17 @@
             };
 
             $.ajax({
-                url: backendUrl + "/login",
+                url: "http://localhost:8083/auth/login",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(loginData),
-                xhrFields: {
-                    withCredentials: true // Ensure credentials (cookies) are sent
-                },
                 success: function(response) {
+
                     const message = response.message;
                     const role = response.role;
                     const name = response.name;
+                    console.log(message)
+                    localStorage.setItem('userName', name);
 
                     if (role === 'ADMIN') {
                         window.location.href = 'homeA';
@@ -148,11 +146,7 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.log('XHR:', xhr); // Log the entire XHR object
-                    console.log('Status:', status); // Log the status
-                    console.log('Error:', error); // Log the error
-
-                    $('#login-message').text('Login failed: ' + xhr.responseText);
+                    $('#login-message').text('Login failed. Please try again.');
                 }
             });
         });

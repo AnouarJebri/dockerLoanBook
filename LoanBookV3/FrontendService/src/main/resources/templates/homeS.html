@@ -200,15 +200,17 @@
 
 <!--Script for the session check-->
 <script>
-   /* $(document).ready(function() {
+    $(document).ready(function() {
         // Check if session is valid
         $.ajax({
             url: "http://localhost:8083/auth/checkSession",
             type: "GET",
+
             success: function(sessionResponse) {
                 if (!sessionResponse.valid) {
                     // If session is not valid, redirect to loginError
-                    window.location.href = 'loginError';
+                    //window.location.href = 'loginError';
+                    console.log(sessionResponse.valid)
                 }
             },
             error: function() {
@@ -216,44 +218,7 @@
                 window.location.href = 'loginError';
             }
         });
-    });*/
-
-   $(document).ready(function() {
-       const backendUrl = 'http://localhost:8083/auth';
-
-       // Check if session is valid
-       $.ajax({
-           url: backendUrl + "/checkSession",
-           type: "GET",
-           success: function(sessionResponse) {
-               if (!sessionResponse.valid) {
-                   // If session is not valid, redirect to loginError
-                   window.location.href = 'loginError';
-               }
-           },
-           error: function(xhr, status, error) {
-               alert('Session check failed: ' + xhr.responseText);
-               window.location.href = 'loginError';
-           }
-       });
-
-       function loadRestrictedContent() {
-           // Example of loading content if the session is valid
-           $.ajax({
-               url: backendUrl + "/restrictedPage",
-               type: "GET",
-               xhrFields: {
-                   withCredentials: true
-               },
-               success: function(response) {
-                   $('#restrictedContent').text(response);
-               },
-               error: function(xhr, status, error) {
-                   alert('Failed to load restricted content: ' + xhr.responseText);
-               }
-           });
-       }
-   });
+    });
 
 </script>
 
@@ -270,15 +235,7 @@
             $.ajax({
                 type: "POST",
                 url: backendUrl+"/logout",
-                xhrFields: {
-                    withCredentials: true // Ensure credentials (cookies) are sent
-                },
                 success: function(response) {
-                    localStorage.clear();
-                    // Clear cookies by setting expiration to the past
-                    //document.cookie.split(';').forEach(function(c) {
-                       // document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=Thu, 01 Jan 1970 00:00:00 GMT');
-                    //});
                     alert(response);
                     window.location.href = "/login";
                 },

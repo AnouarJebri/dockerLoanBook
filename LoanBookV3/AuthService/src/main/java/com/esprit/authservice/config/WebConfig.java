@@ -1,4 +1,4 @@
-package com.esprit.authservice.config;
+/*package com.esprit.authservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -16,3 +16,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true); // Allow credentials (cookies)
     }
 }
+*/

@@ -123,6 +123,7 @@
 
 <script>
     $(document).ready(function() {
+        const backendUrl="http://localhost:8083/auth"
         $("#registerForm").submit(function(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -135,7 +136,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8083/auth/signup",
+                url: backendUrl+"/signup",
                 contentType: "application/json",
                 data: JSON.stringify(formData),
                 success: function(response) {

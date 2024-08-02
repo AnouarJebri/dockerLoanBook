@@ -3,7 +3,7 @@ version: '3.8'
 
 networks:
   microsnetwork:
-    driver: bridge
+
 
 
 
@@ -92,18 +92,18 @@ services:
       configserver:
         condition: service_started
 
-  #frontendservice:
-    #build:
-     # context: ./FrontendService
-      #dockerfile: Dockerfile
-    #image: frontendservice:latest
-    #container_name: frontendservice
-    #ports:
-     # - "8085:8085"
-    #networks:
-     # - microsnetwork
-    #depends_on:
-     # mariadb:
-      #  condition: service_started
-      #configserver:
-       # condition: service_started
+#  frontendservice:
+#    build:
+#      context: ./FrontendService
+#      dockerfile: Dockerfile
+#    image: frontendservice:latest
+#    container_name: frontendservice
+#    ports:
+#      - "8085:8085"
+#    networks:
+#      - microsnetwork
+#    depends_on:
+#      mariadb:
+#        condition: service_started
+#      configserver:
+#        condition: service_started

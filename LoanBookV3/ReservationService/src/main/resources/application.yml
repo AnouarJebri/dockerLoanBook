@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://mariadb:3306/auth_service
+    username: root
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  application:
+    name: ReservationService
+server:
+  port: 8082

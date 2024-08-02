@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/FrontendService/pom.xml" />
         <option value="$PROJECT_DIR$/frontend/pom.xml" />
         <option value="$PROJECT_DIR$/BookService/pom.xml" />
+        <option value="$PROJECT_DIR$/ReservationService/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

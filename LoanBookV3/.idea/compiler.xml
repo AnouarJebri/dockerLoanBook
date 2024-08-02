@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="FrontendService" />
         <module name="BookService" />
+        <module name="ReservationService" />
         <module name="ConfigServer" />
         <module name="AuthService" />
       </profile>
@@ -23,6 +24,7 @@
       <module name="BookService" options="-parameters" />
       <module name="ConfigServer" options="-parameters" />
       <module name="FrontendService" options="-parameters" />
+      <module name="ReservationService" options="-parameters" />
       <module name="frontend" options="-parameters" />
     </option>
   </component>

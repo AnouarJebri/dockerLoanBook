@@ -2,7 +2,6 @@ package com.esprit.authservice.controller;
 
 import com.esprit.authservice.model.User;
 import com.esprit.authservice.service.UserService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -48,14 +47,15 @@ public class UserController {
         }
 
         // Create a session and set user details
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
+//        HttpSession session = request.getSession();
+//        session.setAttribute("user", user);
 
         // Prepare the response
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Login successful.");
         response.put("role", user.getRole().name()); // Assuming role is an enum
         response.put("name", user.getNom()+" "+user.getPrenom());
+        response.put("id",user.getId());
 
         return ResponseEntity.ok(response);
     }
@@ -69,37 +69,37 @@ public class UserController {
     }
 
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-        // Invalidate the session on the server side
-        HttpSession session = request.getSession(false); // false to avoid creating a new session if one does not exist
-        if (session != null) {
-            session.invalidate(); // Invalidate the session
-        }
+//    @PostMapping("/logout")
+//    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+//        // Invalidate the session on the server side
+////        HttpSession session = request.getSession(false); // false to avoid creating a new session if one does not exist
+////        if (session != null) {
+////            session.invalidate(); // Invalidate the session
+////        }
+//
+//        // Remove the session cookie from the client side
+//       /* Cookie cookie = new Cookie("JSESSIONID", null);
+//        cookie.setPath("/"); // Set the path to ensure the cookie is removed
+//        cookie.setMaxAge(0); // Set max age to 0 to remove the cookie immediately
+//        response.addCookie(cookie);*/
+//
+//        // Prepare the response
+//        Map<String, String> responseBody = new HashMap<>();
+//        responseBody.put("message", "Logout successful.");
+//
+//        return ResponseEntity.ok(responseBody);
+//    }
 
-        // Remove the session cookie from the client side
-       /* Cookie cookie = new Cookie("JSESSIONID", null);
-        cookie.setPath("/"); // Set the path to ensure the cookie is removed
-        cookie.setMaxAge(0); // Set max age to 0 to remove the cookie immediately
-        response.addCookie(cookie);*/
-
-        // Prepare the response
-        Map<String, String> responseBody = new HashMap<>();
-        responseBody.put("message", "Logout successful.");
-
-        return ResponseEntity.ok(responseBody);
-    }
 
 
-
-    @GetMapping("/checkSession")
-    public ResponseEntity<Map<String, Boolean>> checkSession(HttpServletRequest request) {
-        HttpSession session = request.getSession(false); // Get the current session, if it exists
-        boolean isValid = (session != null); // Check if the session is not null
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("valid", isValid);
-        return ResponseEntity.ok(response); // Return the session validity as JSON
-    }
+//    @GetMapping("/checkSession")
+//    public ResponseEntity<Map<String, Boolean>> checkSession(HttpServletRequest request) {
+//        HttpSession session = request.getSession(false); // Get the current session, if it exists
+//        boolean isValid = (session != null); // Check if the session is not null
+//        Map<String, Boolean> response = new HashMap<>();
+//        response.put("valid", isValid);
+//        return ResponseEntity.ok(response); // Return the session validity as JSON
+//    }
 
     /*@CrossOrigin(origins = "http://localhost:8085", allowCredentials = "true")
     @GetMapping("/restrictedPage")

@@ -130,13 +130,15 @@
                 contentType: "application/json",
                 data: JSON.stringify(loginData),
                 success: function(response) {
-
                     const message = response.message;
                     const role = response.role;
                     const name = response.name;
-                    console.log(message)
+                    const userId = response.id;
+                    console.log(message);
+                    // Store the JWT token and the username in localStorage
                     localStorage.setItem('userName', name);
-
+                    localStorage.setItem('id', userId);
+                    // Redirect based on role
                     if (role === 'ADMIN') {
                         window.location.href = 'homeA';
                     } else if (role === 'SUBSCRIBER') {
@@ -151,58 +153,7 @@
             });
         });
     });
-    /*$(document).ready(function() {
-        $("#loginForm").on('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
 
-            const email = $('#email').val();
-            const password = $('#password').val();
-
-            const loginData = {
-                email: email,
-                password: password
-            };
-
-            $.ajax({
-                url: "http://localhost:8083/auth/login",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(loginData),
-                success: function(response) {
-                    const message = response.message;
-                    const role = response.role;
-
-                    // Check if session is valid
-                    $.ajax({
-                        url: "http://localhost:8083/auth/checkSession",
-                        type: "GET",
-                        success: function(sessionResponse) {
-                            if (sessionResponse.valid) {
-                                // Redirect based on role
-                                if (role === 'ADMIN') {
-                                    window.location.href = 'homeA';
-                                    alert(message);
-                                } else if (role === 'SUBSCRIBER') {
-                                    window.location.href = 'homeS';
-                                    alert(message);
-                                }
-                            } else {
-                                // If session is not valid, redirect to loginError
-                                window.location.href = 'loginError';
-                            }
-                        },
-                        error: function() {
-                            // Handle session check error
-                            $('#login-message').text('Session check failed. Please try again.');
-                        }
-                    });
-                },
-                error: function(xhr, status, error) {
-                    $('#login-message').text('Login failed. Please try again.');
-                }
-            });
-        });
-    });*/
 
 </script>
 </body>

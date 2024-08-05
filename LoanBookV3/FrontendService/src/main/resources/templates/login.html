@@ -113,6 +113,7 @@
 </div>
 <script>
     $(document).ready(function() {
+        const backendUrl="http://authservice:8083/auth";
         $("#loginForm").on('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -125,7 +126,7 @@
             };
 
             $.ajax({
-                url: "http://localhost:8083/auth/login",
+                url: backendUrl+"/login",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(loginData),
@@ -138,6 +139,8 @@
                     // Store the JWT token and the username in localStorage
                     localStorage.setItem('userName', name);
                     localStorage.setItem('id', userId);
+                    localStorage.setItem('role',role);
+                    document.cookie = "userId=" + userId + "; path=/";
                     // Redirect based on role
                     if (role === 'ADMIN') {
                         window.location.href = 'homeA';

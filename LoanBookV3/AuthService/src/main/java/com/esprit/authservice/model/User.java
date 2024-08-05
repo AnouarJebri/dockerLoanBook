@@ -1,11 +1,15 @@
 package com.esprit.authservice.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @Getter

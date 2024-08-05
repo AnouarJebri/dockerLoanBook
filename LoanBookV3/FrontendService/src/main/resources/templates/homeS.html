@@ -203,7 +203,8 @@
     $(document).ready(function() {
         // Check if UserId is available
         const UserId = localStorage.getItem('id');
-        if (!UserId) {
+        const role = localStorage.getItem('role');
+        if (!UserId||role==='ADMIN') {
             // If no UserId, redirect to loginError
             window.location.href = 'loginError';
         }
@@ -218,8 +219,8 @@
 <script>
     //logout
     $(document).ready(function() {
-        const backendUrl = 'http://localhost:8083/auth';
-        const backendUrl1 = 'http://localhost:8084/books';
+        const backendUrl = 'http://authservice:8083/auth';
+        const backendUrl1 = 'http://bookservice:8084/books';
         let check = false;
         $("#logout").click(function(event) {
             event.preventDefault(); // Prevent default link behavior
@@ -227,8 +228,18 @@
             if(check===false){
                 localStorage.removeItem('id');
                 localStorage.removeItem('userName');
+                localStorage.removeItem('role');
                 check = true;
-                window.location.href = "/login";
+                $.ajax({
+                    url: '/logout',
+                    type: 'POST',
+                    success: function(response) {
+                        window.location.href = '/login';
+                    },
+                    error: function(error) {
+                        console.error('Error logging out:', error);
+                    }
+                });
                 alert(check);
             }
             else {

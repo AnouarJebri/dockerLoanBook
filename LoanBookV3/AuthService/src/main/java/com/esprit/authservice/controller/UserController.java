@@ -3,8 +3,8 @@ package com.esprit.authservice.controller;
 import com.esprit.authservice.model.User;
 import com.esprit.authservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+//import jakarta.servlet.http.HttpServletResponse;
+//import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +39,7 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User loginUser, HttpServletRequest request) {
+    public ResponseEntity<?> login(@RequestBody User loginUser/*, HttpServletRequest request*/) {
         // Check if the user exists
         User user = userService.findByEmail(loginUser.getEmail()).orElse(null);
         if (user == null || !user.getPassword().equals(loginUser.getPassword())) {

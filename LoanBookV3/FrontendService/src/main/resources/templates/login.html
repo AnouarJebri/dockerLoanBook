@@ -104,7 +104,7 @@
                     <input type="submit" class="btnSubmit" value="Login" />
                 </div>
                 <div class="text-center">
-                    Don't have an account? <a th:href="@{/register}">Sign up</a>
+                    Don't have an account? <a th:href="@{/api/frontend/register}">Sign up</a>
                 </div>
             </form>
             <div id="login-message"></div>
@@ -113,7 +113,7 @@
 </div>
 <script>
     $(document).ready(function() {
-        const backendUrl="http://authservice/api/auth";
+        const backendUrl="http://localhost/api/auth";
         $("#loginForm").on('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 

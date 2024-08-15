@@ -10,12 +10,12 @@
         <module name="FrontendService" />
         <module name="BookService" />
         <module name="ReservationService" />
-        <module name="api-gateway" />
         <module name="ConfigServer" />
         <module name="AuthService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="api-gateway" target="17" />
       <module name="frontend" target="17" />
     </bytecodeTargetLevel>
   </component>

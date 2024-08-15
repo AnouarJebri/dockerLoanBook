@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     @Getter
-    public final static String frontendUrl="http://frontendservice:8085";
+    public final static String frontendUrl="http://frontendservice/";
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         System.out.println("Configuring CORS"); // Log to ensure this method is called

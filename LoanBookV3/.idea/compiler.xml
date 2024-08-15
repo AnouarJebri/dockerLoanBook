@@ -10,6 +10,7 @@
         <module name="FrontendService" />
         <module name="BookService" />
         <module name="ReservationService" />
+        <module name="api-gateway" />
         <module name="ConfigServer" />
         <module name="AuthService" />
       </profile>
@@ -25,6 +26,7 @@
       <module name="ConfigServer" options="-parameters" />
       <module name="FrontendService" options="-parameters" />
       <module name="ReservationService" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
       <module name="frontend" options="-parameters" />
     </option>
   </component>

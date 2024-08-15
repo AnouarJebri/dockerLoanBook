@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: api-gateway
+
+
+
+  cloud:
+    gateway:
+      routes:
+        - id: authservice
+          uri: http://authservice:8083
+          predicates:
+            - Path=/auth/**
+        - id: frontendservice
+          uri: http://frontendservice:8085
+          predicates:
+            - Path=/**
+        - id: bookservice
+          uri: http://bookservice:8084
+          predicates:
+            -Path=/books/**
+#      default-filters:
+#        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+#server:
+#  port: 8087

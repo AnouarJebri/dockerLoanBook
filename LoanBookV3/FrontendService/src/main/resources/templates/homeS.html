@@ -162,6 +162,136 @@
         .post-meta button i {
             margin-right: 5px;
         }
+
+
+
+        /*CSS for the list of books to reserve*/
+
+        #book-list {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        /* Table header styling */
+        #book-list thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        #book-list th, #book-list td {
+            padding: 12px 15px;
+        }
+
+        /* Table body row styling */
+        #book-list tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        #book-list tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        #book-list tbody tr:nth-of-type(odd) {
+            background-color: #ffffff;
+        }
+
+        #book-list tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+
+        /* Hover effect */
+        #book-list tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Responsive table */
+        @media (max-width: 600px) {
+            #book-list thead {
+                display: none;
+            }
+
+            #book-list, #book-list tbody, #book-list tr, #book-list td {
+                display: block;
+                width: 100%;
+            }
+
+            #book-list tr {
+                margin-bottom: 15px;
+            }
+
+            #book-list td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            #book-list td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 50%;
+                padding-left: 15px;
+                font-weight: bold;
+                text-align: left;
+            }
+        }
+
+
+
+        #flash-message {
+            display: none;
+            background-color: green;
+            color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #mini-cart {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto; /* Ensures vertical scrolling */
+            width: 250px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #cart-items {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #cart-items li {
+            display: block;
+            /*justify-content: space-between; !* Aligns author and title side by side *!*/
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+            color: black; /* Ensures the text color is black */
+            margin: 5px 0;
+        }
+
+        #reserve-btn {
+            margin-top: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        #reserve-btn:hover {
+            background-color: #0056b3;
+        }
+
     </style>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
@@ -176,9 +306,29 @@
         <input type="text" placeholder="Search for users...">
         <button class="search-button"><i class="fas fa-search"></i></button>
     </div>
+
+    <!-- Add this inside your body where you want the flash message to appear -->
+    <div id="flash-message"></div>
     <ul>
-        <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="#" id="home"><i class="fas fa-home"></i> Home</a></li>
+<!--        <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>-->
+        <li id="cart-container">
+            <a href="#"><i class="add-to-cart-btn fas fa-shopping-cart"></i>Cart</a>
+            <div id="mini-cart">
+                <table id="cart-items-table" ><!--class="table"-->
+                    <thead id="cart-table-header" style="display: none;">
+                    <tr>
+                        <th>Author</th>
+                        <th>Title</th>
+                    </tr>
+                    </thead>
+                    <tbody id="cart-items">
+                    <!-- Reserved Book rows will be appended here -->
+                    </tbody>
+                </table>
+                <button id="reserve-btn" style="margin-top: 10px;">Reserve</button>
+            </div>
+        </li>
         <li><a href="#"><i class="fas fa-user-circle"></i> Profile</a></li>
         <li><a href="#" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
@@ -192,6 +342,23 @@
             <p>View your profile</p>
         </div>
     </div>
+    <!--List of the books here-->
+    <div id="book-list-section" style="display: none;">
+        <h2>List of Books</h2>
+        <table id="book-list" class="table">
+            <thead>
+            <tr>
+                <th>author</th>
+                <th>number of books</th>
+                <th>title</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Book rows will be appended here -->
+            </tbody>
+        </table>
+    </div>
 </div>
 
 
@@ -201,12 +368,13 @@
 <!--Script for the session check-->
 <script>
     $(document).ready(function() {
+        const LocalUrl = '/api/frontend';
         // Check if UserId is available
         const UserId = localStorage.getItem('id');
         const role = localStorage.getItem('role');
         if (!UserId||role==='ADMIN') {
             // If no UserId, redirect to loginError
-            window.location.href = 'loginError';
+            window.location.href = LocalUrl+'loginError';
         }
     });
 
@@ -217,11 +385,139 @@
 
 
 <script>
-    //logout
+
     $(document).ready(function() {
         const backendUrl = 'http://localhost/api/auth';
         const backendUrl1 = 'http://localhost/api/books';
+        const LocalUrl = '/api/frontend';
+        const cartKey = "userCart";
         let check = false;
+
+
+
+
+
+
+
+        //List the books for reservations
+
+        $.ajax({
+            type: "GET",
+            url: backendUrl1+"/ListBook",
+            success: function(response) {
+                const books = response;
+                const tbody = $("#book-list tbody");
+                tbody.empty(); // Clear any existing rows
+
+
+                books.forEach(book => {
+                    const row = `<tr>
+                            <td>${book.author}</td>
+                            <td>${book.nb_of_books}</td>
+                            <td>${book.title}</td>
+
+                            <td>
+                                <button class="add-to-cart-btn fas fa-shopping-cart" data-id="${book.id}"
+                                data-author="${book.author}"
+                                data-title="${book.title}"></button>
+                            </td>
+                        </tr>`;
+                    tbody.append(row);
+                });
+
+                // Show the book list section
+                 $("#book-list-section").show();
+            },
+            error: function(error) {
+                alert("Error fetching books: " + error.responseText);
+            }
+        });
+
+
+
+
+
+
+        // Load cart from localStorage
+        let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+        // Update the mini cart with items from localStorage
+        cart.forEach(book => {
+            const cartItem = `<li>${book.title} by ${book.author}</li>`;
+            $("#cart-items").append(cartItem);
+        });
+        // Add to cart functionality
+        $(document).on('click', '.add-to-cart-btn', function() {
+            const bookId = $(this).data('id');
+            const author = $(this).data('author');
+            const title = $(this).data('title');
+            const book = { id: bookId, author: author, title: title };
+
+            if (!cart.some(item => item.id === bookId)) {
+                cart.push(book);
+
+                // Save cart to localStorage
+                localStorage.setItem(cartKey, JSON.stringify(cart));
+
+                // Show flash message
+                $("#flash-message").text("Added to cart successfully!").fadeIn().delay(2000).fadeOut();
+
+                // Update the mini cart
+                if (cart.length > 0) {
+                    updateMiniCart();
+                }
+            }
+        });
+        // Function to update mini cart
+        function updateMiniCart() {
+            $("#cart-items").empty(); // Clear the table body
+
+            if (cart.length > 0) {
+                $("#cart-table-header").show(); // Show table headers
+                $("#reserve-btn").show(); // Show the reserve button
+
+                // Loop through each item in the cart and add it as a table row
+                cart.forEach(book => {
+                    const cartItemRow = `<tr>
+                                    <td>${book.author}</td>
+                                    <td>${book.title}</td>
+                                 </tr>`;
+                    $("#cart-items").append(cartItemRow);
+                });
+
+                // Ensure the mini cart is visible
+                $("#mini-cart").show();
+                // Reserve button click event
+                $("#reserve-btn").click(function() {
+                    // Handle reservation logic here, e.g., send the cart data to the server
+                    alert("Reservation process initiated.");
+
+                    localStorage.removeItem(cartKey);
+                    cart = [];
+                    $("#cart-items").empty();
+                    $("#mini-cart").hide();
+
+                });
+
+            } else {
+                $("#cart-table-header").hide(); // Hide table headers
+                $("#reserve-btn").hide(); // Hide the reserve button
+            }
+        }
+
+        // Toggle mini cart display
+        $("#cart-container a").click(function(event) {
+            event.preventDefault();
+            $("#mini-cart").toggle();
+        });
+
+
+
+
+
+
+        //logout
+
         $("#logout").click(function(event) {
             event.preventDefault(); // Prevent default link behavior
 
@@ -231,23 +527,32 @@
                 localStorage.removeItem('role');
                 check = true;
                 $.ajax({
-                    url: '/logout',
+                    url: LocalUrl+'/logout',
                     type: 'POST',
                     success: function(response) {
-                        window.location.href = '/login';
+                        window.location.href = LocalUrl+'/login';
                     },
                     error: function(error) {
                         console.error('Error logging out:', error);
                     }
                 });
-                alert(check);
             }
             else {
-                alert(check);
-                window.location.href = "/loginError";
+                window.location.href = LocalUrl+"/loginError";
             }
             console.log(check)
         });
+
+
+
+
+
+        //List the books and the reservation process
+        $("#view-books").click(function(event) {
+            event.preventDefault(); // Prevent default link behavior
+
+        });
+
 
     });
 </script>

@@ -124,6 +124,7 @@
 <script>
     $(document).ready(function() {
         const backendUrl="http://localhost/api/auth"
+        const LocalUrl = '/api/frontend';
         $("#registerForm").submit(function(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -141,7 +142,7 @@
                 data: JSON.stringify(formData),
                 success: function(response) {
                     alert("Success: " + response);
-                    window.location.href = '/login';
+                    window.location.href = LocalUrl+'/login';
                 },
                 error: function(error) {
                     alert("Error: " + error.responseText);

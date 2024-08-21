@@ -400,12 +400,13 @@
 <!--Script for the session check-->
 <script>
     $(document).ready(function() {
+        const LocalUrl = '/api/frontend';
         // Check if UserId is available
         const UserId = localStorage.getItem('id');
         const role = localStorage.getItem('role');
         if (!UserId||role==='SUBSCRIBER') {
             // If no UserId, redirect to loginError
-            window.location.href = 'loginError';
+            window.location.href = LocalUrl+'loginError';
         }
     });
 
@@ -419,30 +420,27 @@
     $(document).ready(function() {
         const backendUrl = 'http://localhost/api/auth';
         const backendUrl1 = 'http://localhost/api/books';
+        const LocalUrl = '/api/frontend';
         let check = false;
         $("#logout").click(function(event) {
             event.preventDefault(); // Prevent default link behavior
 
             if(check===false){
-                localStorage.removeItem('id');
-                localStorage.removeItem('userName');
-                localStorage.removeItem('role');
+                localStorage.clear();
                 check = true;
                 $.ajax({
-                    url: '/logout',
+                    url: LocalUrl+'/logout',
                     type: 'POST',
                     success: function(response) {
-                        window.location.href = '/login';
+                        window.location.href = LocalUrl+'/login';
                     },
                     error: function(error) {
                         console.error('Error logging out:', error);
                     }
                 });
-                alert(check);
             }
             else {
-                alert(check);
-                window.location.href = "/loginError";
+                window.location.href = LocalUrl+'/loginError';
             }
             console.log(check)
         });

@@ -1,17 +1,13 @@
 package com.esprit.reservationservice.model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -20,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "reservations")
-public class reservation {
+public class Reservation {
     @GeneratedValue
     @Id
     private Integer id;
@@ -31,34 +27,35 @@ public class reservation {
     @Column(nullable = false)
     private LocalDate date_take_back;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "bookIDs", columnDefinition = "TEXT")
-    private String bookIDs;
+    @ManyToOne
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
 
-    @Transient
-    private List<Integer> numbers;
-
-    @PostLoad
-    @PostPersist
-    @PostUpdate
-    private void onLoad() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        if (bookIDs != null && !bookIDs.isEmpty()) {
-            numbers = objectMapper.readValue(bookIDs, objectMapper.getTypeFactory().constructCollectionType(List.class, Integer.class));
-        }
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", date_intake=" + date_intake +
+                ", date_take_back=" + date_take_back +
+                ", user=" + user +
+                ", book=" + book +
+                '}';
     }
 
-    @PrePersist
-    @PreUpdate
-    private void onSave() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        bookIDs = objectMapper.writeValueAsString(numbers);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return Objects.equals(id, that.id) && Objects.equals(date_intake, that.date_intake) && Objects.equals(date_take_back, that.date_take_back) && Objects.equals(user, that.user) && Objects.equals(book, that.book);
     }
 
-    // Method to check if a number exists in the list
-    public boolean containsNumber(Integer number) {
-        return numbers != null && numbers.contains(number);
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, date_intake, date_take_back, user, book);
     }
-
-
 }

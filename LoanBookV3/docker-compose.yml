@@ -30,19 +30,19 @@ services:
       #retries: 3
 
 
-  configserver:
-    build:
-      context: ./ConfigServer
-      dockerfile: Dockerfile
-    image: configserver:latest
-    #container_name: configserver
-    ports:
-      - "8888:8888"
-    networks:
-      - microsnetwork
-    depends_on:
-      mariadb:
-        condition: service_started
+#  configserver:
+#    build:
+#      context: ./ConfigServer
+#      dockerfile: Dockerfile
+#    image: configserver:latest
+#    #container_name: configserver
+#    ports:
+#      - "8888:8888"
+#    networks:
+#      - microsnetwork
+#    depends_on:
+#      mariadb:
+#        condition: service_started
     #healthcheck:
      # test: [ "CMD", "curl", "-f", "http://localhost:8888/hi" ]
       #interval: 10s
@@ -64,8 +64,8 @@ services:
     depends_on:
       mariadb:
         condition: service_started
-      configserver:
-        condition: service_started
+#      configserver:
+#        condition: service_started
 
 
 
@@ -89,8 +89,8 @@ services:
     depends_on:
       mariadb:
         condition: service_started
-      configserver:
-        condition: service_started
+#      configserver:
+#        condition: service_started
 
   frontendservice:
     build:
@@ -105,12 +105,38 @@ services:
     depends_on:
       mariadb:
         condition: service_started
-      configserver:
+#      configserver:
+#        condition: service_started
+      authservice:
+        condition: service_started
+      bookservice:
+        condition: service_started
+      reservationservice:
+        condition: service_started
+
+
+
+
+
+
+  reservationservice:
+    build:
+      context: ./ReservationService
+      dockerfile: Dockerfile
+    image: reservationservice:latest
+    container_name: reservationservice
+    networks:
+      - microsnetwork
+    depends_on:
+      mariadb:
         condition: service_started
       authservice:
         condition: service_started
       bookservice:
         condition: service_started
+
+
+
 
 
 
@@ -130,18 +156,22 @@ services:
       - microsnetwork
 
 
-#  api-gateway:
-#    build:
-#      context: ./api-gateway
-#      dockerfile: Dockerfile
-#    image: api-gateway
-#    container_name: api-gateway
-#    ports:
-#      - "8087:8087"
+
+
+
+#  maven-builder:
+#    image: maven:3.9.2-openjdk-17
+#    container_name: maven-builder
+#    volumes:
+#      - ./AuthService:/appv1/AuthService
+#      - ./BookService:/appv1/BookService
+#      - ./ReservationService:/appv1/ReservationService
+#      - ./target:/appv1/target
+#    working_dir: /appv1
+#    command: >
+#      bash -c "cd AuthService && mvn clean install &
+#               cd ../BookService && mvn clean install &
+#               cd ../ReservationService && mvn clean install &
+#               wait"
 #    networks:
 #      - microsnetwork
-#    depends_on:
-#      authservice:
-#        condition: service_started
-#      frontendservice:
-#        condition: service_started

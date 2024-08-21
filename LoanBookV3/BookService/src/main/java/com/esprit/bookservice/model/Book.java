@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -29,6 +30,9 @@ public class Book {
 
     @Column(nullable = false)
     private int nb_of_books;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<Reservation> reservations;
 
     @Override
     public String toString() {

@@ -22,7 +22,7 @@ public class BookService {
     public List<Book> findAll() {
         List<Book> bookList = booksRepository.findAll();
         return bookList.stream()
-                .map(book -> new Book(book.getId(),book.getTitle(),book.getAuthor(),book.getNb_of_books()))
+                .map(book -> new Book(book.getId(),book.getTitle(),book.getAuthor(),book.getNb_of_books(),book.getReservations()))
                 .collect(Collectors.toList());
     }
 

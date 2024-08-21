@@ -40,7 +40,7 @@ public class FrontendController {
                 response.addCookie(cookie);
             }
         }
-        return "redirect:/login";
+        return "redirect:/api/frontend/login";
     }
 
 
@@ -57,8 +57,9 @@ public class FrontendController {
                     break;
                 }
             }
+            return "homeA";
         }
-        return "homeA";
+        return "redirect:/api/frontend/loginError";
     }
     @GetMapping("/homeS")
     public String homeS(HttpServletRequest request){
@@ -73,8 +74,9 @@ public class FrontendController {
                     break;
                 }
             }
+            return "homeS";
         }
-        return "homeS";
+        return "redirect:/api/frontend/loginError";
     }
     @GetMapping("/register")
     public String signUP(){

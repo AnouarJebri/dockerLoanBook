@@ -25,7 +25,7 @@ public class UserService {
     public List<User> findAll() {
         List<User> users = userRepository.findAll();
         return users.stream()
-                .map(user -> new User(user.getId(),user.getNom(),user.getPrenom(),user.getEmail(),user.getRole(),user.getPassword()))
+                .map(user -> new User(user.getId(),user.getNom(),user.getPrenom(),user.getEmail(),user.getRole(),user.getPassword(),user.getReservations()))
                 .collect(Collectors.toList());
     }
 }

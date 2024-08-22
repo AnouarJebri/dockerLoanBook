@@ -1,0 +1,285 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+}
+.navbar {
+    background-color: #4b7bec; /* Lighter shade of blue */
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.navbar h1 {
+    font-size: 24px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+.navbar h1 img {
+    width: 40px;
+    height: auto;
+    margin-right: 10px;
+}
+.navbar h1 span {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+.navbar li {
+    margin-right: 20px;
+}
+.navbar li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+.navbar li a:hover {
+    color: #a5b1c2; /* Lighter shade of blue on hover */
+}
+.search-bar {
+    flex-grow: 1;
+    margin-left: 20px;
+}
+.search-bar input {
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    width: 500px;
+    box-sizing: border-box;
+}
+.search-bar input:focus {
+    outline: none;
+    border-color: #4b7bec; /* Lighter shade of blue */
+}
+.search-button {
+    background-color: #4b7bec; /* Lighter shade of blue */
+    color: #fff;
+    border: none;
+    padding: 8px;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s;
+}
+.search-button:hover {
+    background-color: #6f9cec; /* Slightly darker shade of blue on hover */
+}
+.content {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.user-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+.user-info h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+}
+.user-info p {
+    margin: 0;
+    color: #666;
+}
+/*.post {*/
+/*    border-bottom: 1px solid #ddd;*/
+/*    padding-bottom: 20px;*/
+/*    margin-bottom: 20px;*/
+/*}*/
+/*.post:last-child {*/
+/*    border-bottom: none;*/
+/*    margin-bottom: 0;*/
+/*    padding-bottom: 0;*/
+/*}*/
+.post img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+/*.post-content {*/
+/*    display: flex;*/
+/*    align-items: flex-start;*/
+/*}*/
+.post-content p {
+    margin: 0;
+    color: #333;
+}
+.post-content .post-text {
+    flex-grow: 1;
+}
+/*.post-meta {*/
+/*    margin-top: 10px;*/
+/*    font-size: 14px;*/
+/*    color: #666;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*}*/
+.post-meta button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+    margin-right: 20px;
+    transition: color 0.3s;
+}
+.post-meta button:hover {
+    color: #4b7bec; /* Lighter shade of blue on hover */
+}
+.post-meta button i {
+    margin-right: 5px;
+}
+
+
+
+/*CSS for the list of books to reserve*/
+
+#book-list {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+}
+
+/* Table header styling */
+#book-list thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+#book-list th, #book-list td {
+    padding: 12px 15px;
+}
+
+/* Table body row styling */
+#book-list tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+#book-list tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+#book-list tbody tr:nth-of-type(odd) {
+    background-color: #ffffff;
+}
+
+#book-list tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+/* Hover effect */
+#book-list tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Responsive table */
+@media (max-width: 600px) {
+    #book-list thead {
+        display: none;
+    }
+
+    #book-list, #book-list tbody, #book-list tr, #book-list td {
+        display: block;
+        width: 100%;
+    }
+
+    #book-list tr {
+        margin-bottom: 15px;
+    }
+
+    #book-list td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    #book-list td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+    }
+}
+
+
+
+#flash-message {
+    display: none;
+    background-color: green;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#mini-cart {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto; /* Ensures vertical scrolling */
+    width: 250px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#cart-items {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#cart-items li {
+    display: block;
+    /*justify-content: space-between; !* Aligns author and title side by side *!*/
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+    color: black; /* Ensures the text color is black */
+    margin: 5px 0;
+}
+
+#reserve-btn {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#reserve-btn:hover {
+    background-color: #0056b3;
+}

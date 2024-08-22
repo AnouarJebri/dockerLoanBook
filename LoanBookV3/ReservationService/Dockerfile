@@ -1,6 +1,6 @@
 FROM openjdk:17-jdk-alpine
-WORKDIR /appv1
+WORKDIR /appv1/ReservationService
 
-COPY target/ReservationService-0.0.1-SNAPSHOT.jar /appv1/ReservationService-0.0.1-SNAPSHOT.jar
+#COPY target/ReservationService-0.0.1-SNAPSHOT.jar /appv1/ReservationService-0.0.1-SNAPSHOT.jar
 
-CMD ["java", "-jar", "/appv1/ReservationService-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/appv1/ReservationService/target/ReservationService-0.0.1-SNAPSHOT.jar"]

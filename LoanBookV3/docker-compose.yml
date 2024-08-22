@@ -23,31 +23,7 @@ services:
       - ./mysql_data:/var/lib/mysql
     networks:
       - microsnetwork
-   # healthcheck:
-    #  test: ["CMD-SHELL", "mysqladmin ping -h mariadba2 -u root -ppassword"]
-     # interval: 10s
-      #timeout: 5s
-      #retries: 3
 
-
-#  configserver:
-#    build:
-#      context: ./ConfigServer
-#      dockerfile: Dockerfile
-#    image: configserver:latest
-#    #container_name: configserver
-#    ports:
-#      - "8888:8888"
-#    networks:
-#      - microsnetwork
-#    depends_on:
-#      mariadb:
-#        condition: service_started
-    #healthcheck:
-     # test: [ "CMD", "curl", "-f", "http://localhost:8888/hi" ]
-      #interval: 10s
-      #timeout: 5s
-      #retries: 3
 
 
 
@@ -57,15 +33,14 @@ services:
       dockerfile: Dockerfile
     image: bookservice:latest
     container_name: bookservice
-#    ports:
-#      - "8084:8084"
+
+    volumes:
+      - ./BookService:/appv1/BookService
     networks:
       - microsnetwork
     depends_on:
       mariadb:
         condition: service_started
-#      configserver:
-#        condition: service_started
 
 
 
@@ -77,20 +52,20 @@ services:
       dockerfile: Dockerfile
     image: authservice:latest
     container_name: authservice
-#    ports:
-#      - "8083:8083"
+    volumes:
+      - ./AuthService:/appv1/AuthService
     networks:
       - microsnetwork
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://authservice:8083/"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 3
+
     depends_on:
       mariadb:
         condition: service_started
-#      configserver:
-#        condition: service_started
+
+
+
+
+
+
 
   frontendservice:
     build:
@@ -98,21 +73,20 @@ services:
       dockerfile: Dockerfile
     image: frontendservice:latest
     container_name: frontendservice
-#    ports:
-#      - "8085:8085"
     networks:
       - microsnetwork
+    volumes:
+      - ./FrontendService:/appv1/FrontendService
     depends_on:
       mariadb:
         condition: service_started
-#      configserver:
-#        condition: service_started
       authservice:
         condition: service_started
       bookservice:
         condition: service_started
       reservationservice:
         condition: service_started
+
 
 
 
@@ -127,6 +101,8 @@ services:
     container_name: reservationservice
     networks:
       - microsnetwork
+    volumes:
+      - ./ReservationService:/appv1/ReservationService
     depends_on:
       mariadb:
         condition: service_started
@@ -159,19 +135,20 @@ services:
 
 
 
-#  maven-builder:
-#    image: maven:3.9.2-openjdk-17
-#    container_name: maven-builder
-#    volumes:
-#      - ./AuthService:/appv1/AuthService
-#      - ./BookService:/appv1/BookService
-#      - ./ReservationService:/appv1/ReservationService
-#      - ./target:/appv1/target
-#    working_dir: /appv1
-#    command: >
-#      bash -c "cd AuthService && mvn clean install &
-#               cd ../BookService && mvn clean install &
-#               cd ../ReservationService && mvn clean install &
-#               wait"
-#    networks:
-#      - microsnetwork
+
+  maven-builder:
+    image: maven:latest
+    container_name: maven-builder
+    volumes:
+      - ./AuthService:/appv1/AuthService
+      - ./BookService:/appv1/BookService
+      - ./ReservationService:/appv1/ReservationService
+      - ./FrontendService:/appv1/FrontendService
+    working_dir: /appv1
+    command: >
+      bash -c "cd AuthService && mvn clean install &
+               cd .. & cd BookService && mvn clean install &
+               cd .. & cd ReservationService && mvn clean install &
+               cd .. & cd FrontendService && mvn clean install"
+    networks:
+      - microsnetwork

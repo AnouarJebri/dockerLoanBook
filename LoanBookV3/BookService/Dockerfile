@@ -1,6 +1,6 @@
 FROM openjdk:17-jdk-alpine
-WORKDIR /appv1
+WORKDIR /appv1/BookService
 
-COPY target/BookService-0.0.1-SNAPSHOT.jar /appv1/BookService-0.0.1-SNAPSHOT.jar
+#COPY target/BookService-0.0.1-SNAPSHOT.jar /appv1/BookService-0.0.1-SNAPSHOT.jar
 
-CMD ["java", "-jar", "/appv1/BookService-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/appv1/BookService/target/BookService-0.0.1-SNAPSHOT.jar"]

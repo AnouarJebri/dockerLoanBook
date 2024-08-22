@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservationController {
     @GetMapping("/test")
     public String test(){
-        return "well we are pros my bros !";
+        return "well maven is now dockerized !";
+    }
+    @GetMapping("/reservations")
+    public String reservations(){
+        return "";
     }
 }

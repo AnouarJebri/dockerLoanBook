@@ -1,18 +1,21 @@
 package com.esprit.reservationservice.model;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@SuperBuilder
 @AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "users")
 public class User {
@@ -39,10 +42,14 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 
+    @Transient
+    private List<String> bookTitlesAndAuthors;
 
     public User() {
         this.role = UserRole.SUBSCRIBER;
     }
+
+
 
     @Override
     public String toString() {
@@ -53,6 +60,8 @@ public class User {
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", password='" + password + '\'' +
+                ", reservations=" + reservations+
+                ", bookTitlesAndAuthors=" + bookTitlesAndAuthors +
                 '}';
     }
 

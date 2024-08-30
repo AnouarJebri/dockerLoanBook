@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -13,6 +20,8 @@ body {
     left: 0;
     top: 0;
     overflow-y: auto;
+    -webkit-transition: width 0.3s;
+    -o-transition: width 0.3s;
     transition: width 0.3s;
     z-index: 1000;
 }
@@ -32,6 +41,8 @@ body {
 }
 .sidebar ul li {
     padding: 10px 20px;
+    -webkit-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
     transition: background-color 0.3s;
 }
 .sidebar ul li:hover {
@@ -106,6 +117,8 @@ body {
     .sidebar.active {
         display: block;
         left: 0;
+        -webkit-transition: left 0.3s ease;
+        -o-transition: left 0.3s ease;
         transition: left 0.3s ease;
     }
 }
@@ -283,4 +296,27 @@ table {
 
 #add-book-form input {
     margin-bottom: 10px;
+}
+.flash-message {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+.flash-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.flash-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }

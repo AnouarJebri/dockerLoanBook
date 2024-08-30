@@ -8,7 +8,7 @@ networks:
 
 
 services:
-
+#original database
   mariadb:
     image: mariadb:latest
     container_name: mariadb
@@ -24,8 +24,21 @@ services:
     networks:
       - microsnetwork
 
-
-
+#test database
+  mariadb-test:
+    image: mariadb:latest
+    container_name: mariadb-test
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: test_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306" # Exposing a different port for the test database
+    volumes:
+      - ./mysql_test_data:/var/lib/mysql
+    networks:
+      - microsnetwork
 
   bookservice:
     build:
@@ -147,9 +160,11 @@ services:
       - ./FrontendService:/appv1/FrontendService
     working_dir: /appv1
     command: >
-      bash -c "cd AuthService && mvn clean install &
-               cd .. & cd BookService && mvn clean install &
-               cd .. & cd ReservationService && mvn clean install &
-               cd .. & cd FrontendService && mvn clean install"
+      bash -c "cd AuthService && mvn clean install &&
+               cd .. && cd BookService && mvn clean install &&
+               cd .. && cd ReservationService && mvn clean install &&
+               cd .. && cd FrontendService && mvn clean install"
+#    command: >
+#      bash -c "cd ReservationService && mvn test"
     networks:
       - microsnetwork

@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    #url: jdbc:h2:mem:testdb
+    url: jdbc:mariadb://mariadb-test:3306/test_db
+    username: root
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  application:
+    name: authservice-test
+server:
+  port: 8183

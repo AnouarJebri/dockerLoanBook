@@ -27,6 +27,7 @@ $(document).ready(function() {
                             <td>${book.author}</td>
                             <td>${book.nb_of_books}</td>
                             <td>${book.title}</td>
+                            <td>${book.reservationsCount}</td>
 
                             <td>
                                 <button class="add-to-cart-btn fas fa-shopping-cart" data-id="${book.id}"

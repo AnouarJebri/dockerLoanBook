@@ -9,11 +9,12 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@SuperBuilder
 @AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "users")
 public class User {
@@ -40,8 +41,26 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 
+    @Transient
+    private List<String> bookTitlesAndAuthors;
+
     public User() {
         this.role = UserRole.SUBSCRIBER;
+    }
+
+    public User(Integer id, String nom, String prenom, String email, UserRole role, List<Reservation> reservations) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.role = role;
+        this.reservations = reservations;
+        this.bookTitlesAndAuthors = this.reservations.stream()
+                .map(reservation -> {
+                    Book book = reservation.getBook();
+                    return book.getTitle() + " by " + book.getAuthor();
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -53,6 +72,8 @@ public class User {
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", password='" + password + '\'' +
+                ", reservations=" + reservations+
+                ", bookTitlesAndAuthors=" + bookTitlesAndAuthors +
                 '}';
     }
 

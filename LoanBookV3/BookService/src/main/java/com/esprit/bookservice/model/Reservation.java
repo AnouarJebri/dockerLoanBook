@@ -35,14 +35,15 @@ public class Reservation {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
+
     @Override
     public String toString() {
         return "Reservation{" +
                 "id=" + id +
                 ", date_intake=" + date_intake +
                 ", date_take_back=" + date_take_back +
-                ", user=" + user +
-                ", book=" + book +
+                ", user=" + user.getNom()+" "+user.getPrenom() +
+                ", book=" + book.getTitle()+" "+book.getAuthor()+
                 '}';
     }
 

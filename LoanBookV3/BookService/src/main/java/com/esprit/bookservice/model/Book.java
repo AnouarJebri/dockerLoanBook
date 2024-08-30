@@ -13,7 +13,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @SuperBuilder
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "books")
@@ -33,6 +32,18 @@ public class Book {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
+
+    @Transient
+    private int nb_reservations;
+
+    public Book(Integer id, String title, String author, int nb_of_books,List<Reservation>reservations ,int nb_reservations) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.nb_of_books = nb_of_books;
+        this.reservations = reservations;
+        this.nb_reservations = nb_reservations;
+    }
 
     @Override
     public String toString() {

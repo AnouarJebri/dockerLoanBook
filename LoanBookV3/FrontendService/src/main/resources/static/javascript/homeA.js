@@ -2,6 +2,7 @@
 $(document).ready(function() {
     const backendUrl = 'http://localhost/api/auth';
     const backendUrl1 = 'http://localhost/api/books';
+    const backendUrl2 ='http://localhost/api/reservations';
     const LocalUrl = '/api/frontend';
     let check = false;
     $("#logout").click(function(event) {
@@ -27,25 +28,34 @@ $(document).ready(function() {
         console.log(check)
     });
 
-    //list the users
+    // List the users
     $("#view-users").click(function(event) {
         event.preventDefault(); // Prevent default link behavior
 
         $.ajax({
             type: "GET",
-            url: backendUrl+"/users",
+            url: backendUrl + "/users",
             success: function(response) {
                 const users = response;
                 const tbody = $("#user-list tbody");
                 tbody.empty(); // Clear any existing rows
 
                 users.forEach(user => {
+                    // Construct a string to display all book titles and authors
+                    let books = '';
+                    if (user.reservation && user.reservation.length > 0) {
+                        books = user.reservation.join(', ');
+                    } else {
+                        books = 'No books reserved';
+                    }
+
                     const row = `<tr>
-                            <td>${user.nom}</td>
-                            <td>${user.prenom}</td>
-                            <td>${user.email}</td>
-                            <td>${user.role}</td>
-                        </tr>`;
+                    <td>${user.nom}</td>
+                    <td>${user.prenom}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>${books}</td>
+                </tr>`;
                     tbody.append(row);
                 });
 
@@ -57,7 +67,33 @@ $(document).ready(function() {
                 alert("Error fetching users: " + error.responseText);
             }
         });
+
+        $('#returnBooksBtn').on('click', function() {
+            $.ajax({
+                url: backendUrl2+'/return',
+                type: 'POST',
+                contentType: 'application/json',
+                success: function(response) {
+                    showFlashMessage('Success: ' + response, 'success');
+                },
+                error: function(xhr, status, error) {
+                    showFlashMessage('Error: ' + xhr.responseText, 'error');
+                }
+            });
+        });
+
+        function showFlashMessage(message, type) {
+            var $flashMessage = $('#flashMessage');
+            $flashMessage
+                .text(message)
+                .removeClass('success error')
+                .addClass(type)
+                .fadeIn(400)
+                .delay(3000)
+                .fadeOut(400);
+        }
     });
+
 
 
 
@@ -80,6 +116,7 @@ $(document).ready(function() {
                             <td>${book.author}</td>
                             <td>${book.nb_of_books}</td>
                             <td>${book.title}</td>
+                            <td>${book.reservationsCount}</td>
 
                             <td>
                                 <button class="edit-book-btn fas fa-edit" data-id="${book.id}"
@@ -100,6 +137,8 @@ $(document).ready(function() {
                 alert("Error fetching books: " + error.responseText);
             }
         });
+
+
     });
 
 

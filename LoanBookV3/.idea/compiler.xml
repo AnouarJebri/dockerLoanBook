@@ -7,15 +7,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="ReservationService" />
         <module name="FrontendService" />
         <module name="BookService" />
-        <module name="ReservationService" />
-        <module name="ConfigServer" />
         <module name="AuthService" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api-gateway" target="17" />
+      <module name="ConfigServer" target="17" />
       <module name="frontend" target="17" />
     </bytecodeTargetLevel>
   </component>

@@ -30,6 +30,8 @@
 <div class="content">
     <div class="header">
         <h2>Welcome to the Admin Dashboard</h2>
+        <!--For returning books from expired reservations-->
+        <div id="flashMessage" class="flash-message"></div>
     </div>
     <div id="user-list-section" style="display: none;">
         <h2>List of Users</h2>
@@ -40,12 +42,15 @@
                 <th>Prenom</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Reserved books</th>
             </tr>
             </thead>
             <tbody>
             <!-- User rows will be appended here -->
             </tbody>
         </table>
+        <!--For returning books from expired reservations-->
+        <button id="returnBooksBtn" class="fas fa-arrow-circle-left">Return Books</button>
     </div>
 
 
@@ -59,6 +64,7 @@
                 <th>author</th>
                 <th>number of books</th>
                 <th>title</th>
+                <th>reservation number</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -81,6 +87,8 @@
                 <button type="submit">Submit</button>
             </form>
         </div>
+
+
 
 
 

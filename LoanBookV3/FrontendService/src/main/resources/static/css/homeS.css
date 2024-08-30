@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
+* Browsers: last 4 version
+*/
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -8,15 +15,26 @@ body {
     background-color: #4b7bec; /* Lighter shade of blue */
     color: #fff;
     padding: 10px 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .navbar h1 {
     font-size: 24px;
     margin: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 .navbar h1 img {
@@ -32,7 +50,11 @@ body {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 .navbar li {
@@ -42,12 +64,16 @@ body {
     color: #fff;
     text-decoration: none;
     font-size: 18px;
+    -webkit-transition: color 0.3s;
+    -o-transition: color 0.3s;
     transition: color 0.3s;
 }
 .navbar li a:hover {
     color: #a5b1c2; /* Lighter shade of blue on hover */
 }
 .search-bar {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
     flex-grow: 1;
     margin-left: 20px;
 }
@@ -56,6 +82,7 @@ body {
     border-radius: 20px;
     border: 1px solid #ddd;
     width: 500px;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 .search-bar input:focus {
@@ -70,6 +97,8 @@ body {
     border-radius: 50px;
     cursor: pointer;
     margin-left: 10px;
+    -webkit-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
     transition: background-color 0.3s;
 }
 .search-button:hover {
@@ -80,11 +109,16 @@ body {
     margin: 20px auto;
     background-color: #fff;
     border-radius: 8px;
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
 }
 .user-info {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     margin-bottom: 20px;
 }
@@ -92,6 +126,7 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    -o-object-fit: cover;
     object-fit: cover;
     margin-right: 10px;
 }
@@ -118,6 +153,7 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    -o-object-fit: cover;
     object-fit: cover;
     margin-right: 15px;
 }
@@ -130,6 +166,8 @@ body {
     color: #333;
 }
 .post-content .post-text {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
     flex-grow: 1;
 }
 /*.post-meta {*/
@@ -146,6 +184,8 @@ body {
     font-size: 14px;
     color: #666;
     margin-right: 20px;
+    -webkit-transition: color 0.3s;
+    -o-transition: color 0.3s;
     transition: color 0.3s;
 }
 .post-meta button:hover {
@@ -252,6 +292,7 @@ body {
     max-height: 200px;
     overflow-y: auto; /* Ensures vertical scrolling */
     width: 250px;
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 

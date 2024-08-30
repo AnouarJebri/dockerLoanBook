@@ -1,6 +1,7 @@
 spring:
   datasource:
     url: jdbc:mariadb://mariadb:3306/auth_service
+#    url: jdbc:mariadb://localhost:3306/auth_service
     username: root
     password: password
   jpa:

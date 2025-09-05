@@ -1,28 +1,118 @@
 # dockerLoanBook
- -This application is loanBook app based on microservices each microservice is developed with springboot and it is running on a docker container we have a total of 4 microservices :
 
- .AuthService for authentication (I used simple authentication)
- .BookService for handeling the books
- .Reservation for handeling the user's reservations
+**dockerLoanBook** is a microservices-based application for managing book loans.
+It is built with **Spring Boot 3.3.1**, **Java 17**, and **Maven**, containerized with **Docker**, and orchestrated with **Docker Compose**.
 
- -Each microservice has its scripted tests
- -I used nginx as an api gateway reverse proxy in order to not expose the ports of my microservices
- -I made a docker-compose to run my application
- 
- To run the application via docker-compose you need to do these commands down below in this order :
+The project demonstrates a clean microservice architecture with authentication, book management, and reservations, all tied together with a frontend served via **Thymeleaf** and proxied by **NGINX**.
 
-  (of course you need to pull the necessary images first maven:latest and mariadb:latest if you do not have them)
+---
 
- 1. docker-compose up mariadb-test mariadb --build -d (to start the database of production and the database for the tests)
+## Architecture
 
- 2. docker-compose up maven-builder --build -d (to start the maven engine in order to build the dependencies and do the tests of each microservice check the logs to see if there are any existing errors)
+The application is composed of **4 microservices**:
 
- 3. docker-compose up authservice frontendservice reservationservice bookservice nginx --build -d (to start the rest of the services)
+* **AuthService** – Handles authentication & user management (basic auth, no Spring Security).
+* **BookService** – Manages books (add, update, list, search).
+* **ReservationService** – Handles reservations (loan requests, returns, tracking).
+* **FrontendService** – Thymeleaf-based UI for user interaction.
 
- (i did --build option because i used to update my code a lot)
- (of course you need to pull the necessary images first maven:latest and mariadb:latest)
- 
- run the application on mozilla firefox because css is only being loaded there , in case it doesn't load just clear the browser data and try again
- 
- 
- The purpose of this application is cia so my code is far from perfect just focus on its schema
+Additional components:
+
+* **MariaDB** – Shared database container.
+* **Maven Builder** – Builds & tests services in a container.
+* **ConfigService**  – Centralized configuration with Spring Cloud Config.
+* **NGINX** – Reverse proxy & API gateway.
+
+---
+
+## Project Structure
+
+```
+dockerLoanBook/
+│── AuthService/         # Authentication microservice
+│── BookService/         # Book management microservice
+│── ReservationService/  # Reservation/loan microservice
+│── FrontendService/     # Thymeleaf UI
+│── ConfigService/       # Spring Cloud Config Server
+│── nginx/               # NGINX reverse proxy config
+│── docker-compose.yml   # Orchestration file
+```
+
+---
+
+## Testing
+
+* Each microservice includes **unit and integration tests**.
+* Tests run inside the `maven-builder` container.
+* A dedicated `mariadb-test` container is used for isolated test databases.
+
+---
+
+## Running the Application
+
+### 1. Pull required base images
+
+Make sure you have the following images locally:
+
+* `maven:3.9.2-eclipse-temurin-17`
+* `mariadb:latest`
+
+### 2. Start databases
+
+```bash
+docker-compose up mariadb-test mariadb --build -d
+```
+
+### 3. Build & run tests
+
+```bash
+docker-compose up maven-builder --build -d
+```
+
+-> Check the logs for build/test results.
+
+### 4. Start microservices & gateway
+
+```bash
+docker-compose up authservice frontendservice reservationservice bookservice nginx --build -d
+```
+
+---
+
+## Access
+
+* Open the application in **Mozilla Firefox** (recommended).
+
+  > If CSS does not load, clear browser cache and retry.
+* Entry point: `http://localhost:80` (proxied through NGINX).
+
+---
+
+## Purpose
+
+This project was built as a **CIA (Continuous Integration Assessment)**, focusing on:
+
+* Microservice architecture
+* Containerization with Docker
+* Centralized configuration (Spring Cloud Config)
+* Reverse proxying with NGINX
+* Automated builds & tests with containerized Maven
+
+Code is **not production-ready** — the goal is **architecture & orchestration**.
+
+---
+
+## Technologies
+
+* **Java 17**
+* **Spring Boot 3.3.1**
+* **Spring Cloud Config**
+* **MariaDB**
+* **Docker / Docker Compose**
+* **NGINX**
+* **Thymeleaf**
+
+---
+
+## UML Use Case Diagram
+![Use Case Diagram](docs/usecase.png)
